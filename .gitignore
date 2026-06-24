@@ -1,0 +1,31 @@
+.DS_Store
+
+# Local agent/runtime state
+.claude/
+.claude-plugin/
+.codex/
+.gstack/
+.vscode/
+labels/
+sessions/
+statuses/
+views.json
+events.jsonl
+config.json
+
+# Local benchmark scratch files
+jmh结果.txt
+
+# Private or pending sample files
+data/henan.udbx
+
+# Nested repositories are managed independently
+udbx4spec/
+udbx4j/
+udbx4ts/
+udbx4go/
+
+# Local dependency/build outputs in tool experiments
+udbx-copilot/
+udbx-copilot/node_modules/
+udbx-copilot/dist/
