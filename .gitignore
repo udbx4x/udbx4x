@@ -18,6 +18,8 @@ jmh结果.txt
 
 # Private or pending sample files
 data/henan.udbx
+*.udbx-shm
+*.udbx-wal
 
 # Nested repositories are managed independently
 udbx4spec/

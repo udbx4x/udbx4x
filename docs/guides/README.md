@@ -23,6 +23,7 @@
 - [样本文件管理](./sample-management.md)
 - [真实来源夹具准入](./source-fixture-admission.md)
 - [发布工作流](./release-workflow.md)
+- [发布准备状态](./release-readiness.md)
 
 ## 相关文档
 
