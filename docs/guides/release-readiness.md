@@ -32,7 +32,7 @@
 | 仓库 | 当前版本来源 | 当前 tag | 建议下一版本 | 状态 |
 |---|---|---|---|---|
 | `udbx4spec` | `VERSION=1.1.0` | `v1.1.0` 本地已创建 | `v1.1.0` | 已完成本地准备，待推送 main 和 tag |
-| `udbx4j` | `pom.xml=2.0.0` | `v2.0.0` | `v2.1.0` | 需要补 changelog、版本号、release notes |
+| `udbx4j` | `pom.xml=2.1.0` | `v2.0.0` | `v2.1.0` | 已完成本地版本和 changelog 准备，覆盖率门禁仍阻塞 |
 | `udbx4ts` | `package.json=0.3.0` | `v0.3.0` | `v0.4.0` | 需要补 changelog、版本号、release notes |
 | `udbx4go` | `go.mod` module path | 无 | `v0.1.0` | 需要形成首个 release notes 和 tag |
 
@@ -71,9 +71,19 @@
 
 ### `udbx4j`
 
-- `pom.xml` 仍为 `2.0.0`。
-- `CHANGELOG.md` 的 `Unreleased` 性能段落包含旧 API 名称和旧性能阶段信息，发布前需要整理为当前版本事实。
-- 需要新增 `2.1.0` 章节，覆盖：
+- `pom.xml` 已更新为 `2.1.0`。
+- `README.md` 已更新为 `2.1.0` 发布准备口径，不提前声明 Maven Central 已发布。
+- `CHANGELOG.md` 已新增 `2.1.0` 章节，并清理旧 API 名称对应的过期性能段落。
+- JaCoCo 已合并单元测试与集成测试执行数据后再执行覆盖率报告和检查。
+- 已通过：
+  - `make test`：330 个测试通过，1 个性能测试跳过。
+  - `make test-stable-t3`：golden/spec 门禁 19 个测试通过，stable T3 真实样本门禁 5 个集成测试通过。
+  - `make package`：生成 `udbx4j-2.1.0` 包成功。
+- 当前阻塞：
+  - `make test-all` 的测试阶段通过，但 JaCoCo 行覆盖率为 63.1%，低于当前 80% 阈值。
+  - 低覆盖主要集中在 `dataset`、`viewer`、`streaming`、`geometry.geojson`、`metrics`、`pool`。其中 `dataset` 是核心包，不应通过简单排除解决。
+
+`2.1.0` 发布说明应覆盖：
   - Text / GeoText 最小合规基线。
   - CAD 最小 GeoHeader 基线。
   - stable T3 和 compliance database 读取/roundtrip。

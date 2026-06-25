@@ -64,11 +64,10 @@ cd udbx4j
 make test
 make test-all
 make test-stable-t3
-env JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home/bin:/Users/zhangyuting/apache-maven-3.9.9/bin:/usr/bin:/bin:/usr/sbin:/sbin mvn -Dgroups=integration -Dit.test=Udbx4SpecComplianceDatabaseReadTest failsafe:integration-test failsafe:verify
-env JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home/bin:/Users/zhangyuting/apache-maven-3.9.9/bin:/usr/bin:/bin:/usr/sbin:/sbin mvn -Dgroups=integration -Dit.test=Udbx4SpecComplianceDatabaseRoundtripTest failsafe:integration-test failsafe:verify
-env JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home/bin:/Users/zhangyuting/apache-maven-3.9.9/bin:/usr/bin:/bin:/usr/sbin:/sbin mvn -Dtest=SmRegisterDaoSpecTest test
-env JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home/bin:/Users/zhangyuting/apache-maven-3.9.9/bin:/usr/bin:/bin:/usr/sbin:/sbin mvn -Djacoco.skip=true -Dit.test=SampleDataTextDatasetReadTest,Vector3DRealSampleReadTest test-compile failsafe:integration-test failsafe:verify
+make package
 ```
+
+若必须直接调用 Maven，必须显式使用 Java 17；否则 `mvn package -DskipTests` 在默认 JDK 低于 17 时会失败。
 
 #### TypeScript
 
