@@ -8,9 +8,9 @@
 
 - 根仓库 `udbx4x`：`main...origin/main`
 - `udbx4spec`：本地已完成 `v1.1.0` 发布准备提交和 tag，待推送 `main` 与 `v1.1.0`
-- `udbx4j`：`main...origin/main`
-- `udbx4ts`：本地已完成 `v0.4.0` 版本、changelog 和发布门禁准备，待 tag 与 npm 发布
-- `udbx4go`：本地已完成 `v0.1.0` 首发 changelog、发布门禁和发布入口修正，待 tag 与 pkg.go.dev 索引
+- `udbx4j`：本地已完成 `v2.1.0` 发布准备提交和 tag，待推送 `main` 与 `v2.1.0`
+- `udbx4ts`：本地已完成 `v0.4.0` 发布准备提交和 tag，待推送 `main` 与 `v0.4.0`，并完成 npm 发布
+- `udbx4go`：本地已完成 `v0.1.0` 首发准备提交和 tag，待推送 `main` 与 `v0.1.0`，并等待 pkg.go.dev 索引
 
 下一步应在具备网络和凭据后，按发布顺序推送各仓库 `main` 与 release tag，并完成正式发布。远端推送、tag 推送和正式发布仍受网络、仓库权限和生态发布凭据约束。
 
@@ -32,9 +32,9 @@
 | 仓库 | 当前版本来源 | 当前 tag | 建议下一版本 | 状态 |
 |---|---|---|---|---|
 | `udbx4spec` | `VERSION=1.1.0` | `v1.1.0` 本地已创建 | `v1.1.0` | 已完成本地准备，待推送 main 和 tag |
-| `udbx4j` | `pom.xml=2.1.0` | `v2.0.0` | `v2.1.0` | 已完成本地版本、changelog 和发布门禁准备，待 tag / 发布 |
-| `udbx4ts` | `package.json=0.4.0` | `v0.3.0` | `v0.4.0` | 已完成本地版本、changelog 和发布门禁准备，待 tag / npm 发布 |
-| `udbx4go` | `go.mod` module path | 无 | `v0.1.0` | 已完成本地 changelog、门禁和发布入口修正，待 tag / pkg.go.dev 索引 |
+| `udbx4j` | `pom.xml=2.1.0` | `v2.1.0` 本地已创建 | `v2.1.0` | 已完成本地版本、changelog、发布门禁和 tag，待推送 / 发布 |
+| `udbx4ts` | `package.json=0.4.0` | `v0.4.0` 本地已创建 | `v0.4.0` | 已完成本地版本、changelog、发布门禁和 tag，待推送 / npm 发布 |
+| `udbx4go` | `go.mod` module path | `v0.1.0` 本地已创建 | `v0.1.0` | 已完成本地 changelog、门禁、发布入口修正和 tag，待推送 / pkg.go.dev 索引 |
 
 版本建议依据：
 
@@ -83,7 +83,7 @@
   - `make test-stable-t3`：golden/spec 门禁 19 个测试通过，stable T3 真实样本门禁 5 个集成测试通过。
   - `make package`：生成 `udbx4j-2.1.0` 包成功。
 - 当前阻塞：
-  - 远端推送和 Maven Central 正式发布仍需具备网络、Maven Central 凭据和 GPG 签名环境。
+  - 本地 tag `v2.1.0` 已创建；远端推送和 Maven Central 正式发布仍需具备网络、Maven Central 凭据和 GPG 签名环境。
 
 `2.1.0` 发布说明应覆盖：
   - Text / GeoText 最小合规基线。
@@ -106,7 +106,7 @@
   - `npm pack --dry-run --cache /private/tmp/udbx4ts-npm-cache`：发布包 dry-run 成功，包版本 `0.4.0`，23 个文件，约 312.1 kB。
 - 当前阻塞：
   - 默认 `npm pack --dry-run` 在本机因 `~/.npm` cache 权限问题失败；本次验证使用临时 cache 目录规避，不影响项目发布包内容。
-  - 远端推送和 npm 正式发布仍需具备网络、npm token 和 `udbx4x` 组织发布权限。
+  - 本地 tag `v0.4.0` 已创建；远端推送和 npm 正式发布仍需具备网络、npm token 和 `udbx4x` 组织发布权限。
 
 ### `udbx4go`
 
@@ -126,7 +126,7 @@
   - `GOCACHE=/private/tmp/udbx4go-gocache go list ./...`：通过。
   - `GOCACHE=/private/tmp/udbx4go-gocache make build`：通过。
 - 当前阻塞：
-  - 正式发布仍需推送 `main` 和 `v0.1.0` tag；pkg.go.dev 索引依赖远端 tag 可见。
+  - 本地 tag `v0.1.0` 已创建；正式发布仍需推送 `main` 和 `v0.1.0` tag；pkg.go.dev 索引依赖远端 tag 可见。
 
 ## 发布前强制门禁
 
