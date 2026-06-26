@@ -32,7 +32,7 @@
 | 仓库 | 当前版本来源 | 当前 tag | 建议下一版本 | 状态 |
 |---|---|---|---|---|
 | `udbx4spec` | `VERSION=1.1.0` | `v1.1.0` 本地已创建 | `v1.1.0` | 已完成本地准备，待推送 main 和 tag |
-| `udbx4j` | `pom.xml=2.1.0` | `v2.0.0` | `v2.1.0` | 已完成本地版本和 changelog 准备，覆盖率门禁仍阻塞 |
+| `udbx4j` | `pom.xml=2.1.0` | `v2.0.0` | `v2.1.0` | 已完成本地版本、changelog 和发布门禁准备，待 tag / 发布 |
 | `udbx4ts` | `package.json=0.3.0` | `v0.3.0` | `v0.4.0` | 需要补 changelog、版本号、release notes |
 | `udbx4go` | `go.mod` module path | 无 | `v0.1.0` | 需要形成首个 release notes 和 tag |
 
@@ -75,13 +75,15 @@
 - `README.md` 已更新为 `2.1.0` 发布准备口径，不提前声明 Maven Central 已发布。
 - `CHANGELOG.md` 已新增 `2.1.0` 章节，并清理旧 API 名称对应的过期性能段落。
 - JaCoCo 已合并单元测试与集成测试执行数据后再执行覆盖率报告和检查。
+- Swing viewer 已从 SDK 核心覆盖率门禁中排除，覆盖率报告仍保留 viewer 包可见。
+- GPG 签名默认在本地验证中跳过；发布 Maven Central 时必须显式使用 `-Dgpg.skip=false`。
 - 已通过：
-  - `make test`：330 个测试通过，1 个性能测试跳过。
+  - `make test`：345 个测试通过，1 个性能测试跳过。
+  - `make test-all`：345 个单元/spec 测试通过，35 个集成测试通过，SDK 核心 JaCoCo 行覆盖率 `2869/3267 = 87.8%`，超过 80% 门禁。
   - `make test-stable-t3`：golden/spec 门禁 19 个测试通过，stable T3 真实样本门禁 5 个集成测试通过。
   - `make package`：生成 `udbx4j-2.1.0` 包成功。
 - 当前阻塞：
-  - `make test-all` 的测试阶段通过，但 JaCoCo 行覆盖率为 63.1%，低于当前 80% 阈值。
-  - 低覆盖主要集中在 `dataset`、`viewer`、`streaming`、`geometry.geojson`、`metrics`、`pool`。其中 `dataset` 是核心包，不应通过简单排除解决。
+  - 远端推送和 Maven Central 正式发布仍需具备网络、Maven Central 凭据和 GPG 签名环境。
 
 `2.1.0` 发布说明应覆盖：
   - Text / GeoText 最小合规基线。

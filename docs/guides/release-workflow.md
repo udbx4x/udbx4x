@@ -69,6 +69,8 @@ make package
 
 若必须直接调用 Maven，必须显式使用 Java 17；否则 `mvn package -DskipTests` 在默认 JDK 低于 17 时会失败。
 
+Java 本地门禁默认跳过 GPG 签名；正式发布 Maven Central 时必须显式使用 `-Dgpg.skip=false`，并在具备 GPG 私钥、agent 和 Central 凭据的环境中执行。
+
 #### TypeScript
 
 ```bash

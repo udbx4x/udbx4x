@@ -62,17 +62,14 @@ cd udbx4j
 make test
 make test-all
 make test-stable-t3
-env JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home/bin:/Users/zhangyuting/apache-maven-3.9.9/bin:/usr/bin:/bin:/usr/sbin:/sbin mvn -Dgroups=integration -Dit.test=Udbx4SpecComplianceDatabaseReadTest failsafe:integration-test failsafe:verify
-env JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home/bin:/Users/zhangyuting/apache-maven-3.9.9/bin:/usr/bin:/bin:/usr/sbin:/sbin mvn -Dgroups=integration -Dit.test=Udbx4SpecComplianceDatabaseRoundtripTest failsafe:integration-test failsafe:verify
-env JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home/bin:/Users/zhangyuting/apache-maven-3.9.9/bin:/usr/bin:/bin:/usr/sbin:/sbin mvn -Dtest=SmRegisterDaoSpecTest test
-env JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home/bin:/Users/zhangyuting/apache-maven-3.9.9/bin:/usr/bin:/bin:/usr/sbin:/sbin mvn -Djacoco.skip=true -Dit.test=SampleDataTextDatasetReadTest,Vector3DRealSampleReadTest test-compile failsafe:integration-test failsafe:verify
+make package
 ```
 
 发布前 dry run：
 
 ```bash
 cd udbx4j
-mvn -DskipTests package
+make package
 ```
 
 包元数据：
@@ -85,7 +82,7 @@ mvn -DskipTests package
 
 ```bash
 cd udbx4j
-mvn clean deploy
+mvn clean deploy -Dgpg.skip=false
 git tag -a vX.Y.Z -m "Release vX.Y.Z"
 git push origin vX.Y.Z
 gh release create vX.Y.Z
@@ -97,7 +94,7 @@ gh release create vX.Y.Z
 - `CHANGELOG.md` 有带日期的发布章节。
 - `udbx4spec-compliance-report.md` 已更新。
 - release maintainer 具备 Maven Central 凭据。
-- GPG 签名、sources jar、javadoc jar 可正常生成。
+- GPG 签名默认在本地验证中跳过；发布 Maven Central 时必须显式使用 `-Dgpg.skip=false` 并确认 sources jar、javadoc jar 和签名可正常生成。
 - 干净的下游 Maven 项目可以消费该产物。
 
 ## TypeScript：`udbx4ts`
