@@ -9,10 +9,10 @@
 - 根仓库 `udbx4x`：`main...origin/main`
 - `udbx4spec`：本地已完成 `v1.1.0` 发布准备提交和 tag，待推送 `main` 与 `v1.1.0`
 - `udbx4j`：`main...origin/main`
-- `udbx4ts`：本地已完成 `v0.4.0` 版本、changelog 和发布门禁准备，待提交、tag 与 npm 发布
-- `udbx4go`：`main...origin/main`
+- `udbx4ts`：本地已完成 `v0.4.0` 版本、changelog 和发布门禁准备，待 tag 与 npm 发布
+- `udbx4go`：本地已完成 `v0.1.0` 首发 changelog、发布门禁和发布入口修正，待 tag 与 pkg.go.dev 索引
 
-下一步应提交 `udbx4ts v0.4.0` 发布准备结果；之后进入 `udbx4go v0.1.0` 首发准备。远端推送、tag 推送和正式发布仍受网络、仓库权限和生态发布凭据约束。
+下一步应在具备网络和凭据后，按发布顺序推送各仓库 `main` 与 release tag，并完成正式发布。远端推送、tag 推送和正式发布仍受网络、仓库权限和生态发布凭据约束。
 
 ## 建议发布顺序
 
@@ -33,8 +33,8 @@
 |---|---|---|---|---|
 | `udbx4spec` | `VERSION=1.1.0` | `v1.1.0` 本地已创建 | `v1.1.0` | 已完成本地准备，待推送 main 和 tag |
 | `udbx4j` | `pom.xml=2.1.0` | `v2.0.0` | `v2.1.0` | 已完成本地版本、changelog 和发布门禁准备，待 tag / 发布 |
-| `udbx4ts` | `package.json=0.4.0` | `v0.3.0` | `v0.4.0` | 已完成本地版本、changelog 和发布门禁准备，待提交 / tag / npm 发布 |
-| `udbx4go` | `go.mod` module path | 无 | `v0.1.0` | 需要形成首个 release notes 和 tag |
+| `udbx4ts` | `package.json=0.4.0` | `v0.3.0` | `v0.4.0` | 已完成本地版本、changelog 和发布门禁准备，待 tag / npm 发布 |
+| `udbx4go` | `go.mod` module path | 无 | `v0.1.0` | 已完成本地 changelog、门禁和发布入口修正，待 tag / pkg.go.dev 索引 |
 
 版本建议依据：
 
@@ -111,13 +111,22 @@
 ### `udbx4go`
 
 - 尚无 release tag。
-- `CHANGELOG.md` 仍为 `Unreleased`。
-- 需要将当前内容整理为 `0.1.0` 首发章节，覆盖：
-  - UDBX 基础读写。
-  - 2D/3D、Tabular、Text、CAD 数据集。
-  - 公开 API 类型 re-export。
-  - `udbx4spec` 合规测试、真实样本测试和 roundtrip fixture generator。
-  - 已知限制：复杂真实世界 Text / CAD / Network / Model 仍需扩展。
+- `CHANGELOG.md` 已整理为 `0.1.0` 首发章节，覆盖 UDBX 基础读写、2D/3D、Tabular、Text、CAD、公开 API 类型 re-export、`udbx4spec` 合规测试和已知限制。
+- `Makefile` 已修正过期测试入口：
+  - `test-integration` 指向当前实际根包集成测试。
+  - `test-spec` 指向当前实际 `Udbx4Spec` 合规测试入口。
+- `internal/codec.BinaryWriter.WriteByte` 已对齐 `go vet` 的标准 `WriteByte(byte) error` 签名要求。
+- `udbx4spec-compliance-report.md` 已刷新检查时间。
+- 已通过：
+  - `GOCACHE=/private/tmp/udbx4go-gocache make test`：单元、内部 race 覆盖和根包集成测试通过。
+  - `GOCACHE=/private/tmp/udbx4go-gocache make test-stable-t3`：source-derived stable T3 和真实样本专项测试通过。
+  - `GOCACHE=/private/tmp/udbx4go-gocache go test ./...`：全包测试通过。
+  - `GOCACHE=/private/tmp/udbx4go-gocache go test -race ./...`：全包 race 测试通过；macOS 链接器输出 `LC_DYSYMTAB` warning，不影响退出码。
+  - `GOCACHE=/private/tmp/udbx4go-gocache go vet ./...`：通过。
+  - `GOCACHE=/private/tmp/udbx4go-gocache go list ./...`：通过。
+  - `GOCACHE=/private/tmp/udbx4go-gocache make build`：通过。
+- 当前阻塞：
+  - 正式发布仍需推送 `main` 和 `v0.1.0` tag；pkg.go.dev 索引依赖远端 tag 可见。
 
 ## 发布前强制门禁
 
@@ -179,8 +188,6 @@ go list ./...
 
 ## 下一步执行建议
 
-1. 提交 `udbx4ts v0.4.0` 发布准备改动和根目录发布状态更新。
-2. 进入 `udbx4go v0.1.0` 首发准备，补齐版本章节、release notes 和发布门禁验证。
-3. 在具备网络和凭据后，推送各仓库 `main` 与 release tag。
-4. 按 `udbx4spec -> udbx4j -> udbx4ts -> udbx4go` 顺序完成正式发布。
-5. 每个仓库正式发布前复跑对应门禁命令，避免只依赖历史本地结果。
+1. 在具备网络和凭据后，推送各仓库 `main` 与 release tag。
+2. 按 `udbx4spec -> udbx4j -> udbx4ts -> udbx4go` 顺序完成正式发布。
+3. 每个仓库正式发布前复跑对应门禁命令，避免只依赖历史本地结果。
