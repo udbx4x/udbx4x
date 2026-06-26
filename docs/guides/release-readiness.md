@@ -1,6 +1,6 @@
 # 发布准备状态
 
-本文档记录 `udbx4x` 工作区在 2026-06-25 的发布准备状态，用于决定下一轮公开版本发布顺序、版本号和发布前门禁。
+本文档记录 `udbx4x` 工作区在 2026-06-26 的发布准备状态，用于决定下一轮公开版本发布顺序、版本号和发布前门禁。
 
 ## 当前结论
 
@@ -9,10 +9,10 @@
 - 根仓库 `udbx4x`：`main...origin/main`
 - `udbx4spec`：本地已完成 `v1.1.0` 发布准备提交和 tag，待推送 `main` 与 `v1.1.0`
 - `udbx4j`：`main...origin/main`
-- `udbx4ts`：`main...origin/main`
+- `udbx4ts`：本地已完成 `v0.4.0` 版本、changelog 和发布门禁准备，待提交、tag 与 npm 发布
 - `udbx4go`：`main...origin/main`
 
-下一步应先完成根目录发布准备文档提交，并推送 `udbx4spec v1.1.0`；之后再进入 `udbx4j v2.1.0` 发布准备。
+下一步应提交 `udbx4ts v0.4.0` 发布准备结果；之后进入 `udbx4go v0.1.0` 首发准备。远端推送、tag 推送和正式发布仍受网络、仓库权限和生态发布凭据约束。
 
 ## 建议发布顺序
 
@@ -33,7 +33,7 @@
 |---|---|---|---|---|
 | `udbx4spec` | `VERSION=1.1.0` | `v1.1.0` 本地已创建 | `v1.1.0` | 已完成本地准备，待推送 main 和 tag |
 | `udbx4j` | `pom.xml=2.1.0` | `v2.0.0` | `v2.1.0` | 已完成本地版本、changelog 和发布门禁准备，待 tag / 发布 |
-| `udbx4ts` | `package.json=0.3.0` | `v0.3.0` | `v0.4.0` | 需要补 changelog、版本号、release notes |
+| `udbx4ts` | `package.json=0.4.0` | `v0.3.0` | `v0.4.0` | 已完成本地版本、changelog 和发布门禁准备，待提交 / tag / npm 发布 |
 | `udbx4go` | `go.mod` module path | 无 | `v0.1.0` | 需要形成首个 release notes 和 tag |
 
 版本建议依据：
@@ -94,13 +94,19 @@
 
 ### `udbx4ts`
 
-- `package.json` 仍为 `0.3.0`。
-- `CHANGELOG.md` 没有记录本轮 `0.4.0` 变更。
-- 需要新增 `0.4.0` 章节，覆盖：
-  - core SDK 稳定面。
-  - 浏览器 runtime 稳定 API 对齐。
-  - Text / GeoText、CAD、真实样本和 `udbx4spec` 合规测试。
-  - 性能基线脚本和 workflow。
+- `package.json` 和 `package-lock.json` 已更新为 `0.4.0`。
+- `CHANGELOG.md` 已新增 `0.4.0` 章节，覆盖公开 API 最小稳定面、合规数据库、三端 roundtrip、stable T3、真实样本和浏览器运行时稳定 API 对齐。
+- 已通过：
+  - `npm run typecheck`：TypeScript 类型检查通过。
+  - `npm test`：26 个测试文件、129 个用例通过。
+  - `npm run test:stable-t3`：2 个集成测试文件、18 个用例通过。
+  - `npx vitest run tests/integration/udbx4spec-compliance.integration.spec.ts`：合规集成入口 7 个用例通过。
+  - `npm run test:browser`：Playwright 浏览器 smoke 2 个用例通过。
+  - `npm run build`：CJS、ESM 和 DTS 产物生成成功。
+  - `npm pack --dry-run --cache /private/tmp/udbx4ts-npm-cache`：发布包 dry-run 成功，包版本 `0.4.0`，23 个文件，约 312.1 kB。
+- 当前阻塞：
+  - 默认 `npm pack --dry-run` 在本机因 `~/.npm` cache 权限问题失败；本次验证使用临时 cache 目录规避，不影响项目发布包内容。
+  - 远端推送和 npm 正式发布仍需具备网络、npm token 和 `udbx4x` 组织发布权限。
 
 ### `udbx4go`
 
@@ -173,8 +179,8 @@ go list ./...
 
 ## 下一步执行建议
 
-1. 先提交根目录发布准备文档。
-2. 推送 `udbx4spec v1.1.0` 的 `main` 和 tag。
-3. 再发布 `udbx4j v2.1.0` 和 `udbx4ts v0.4.0`。
-4. 最后发布 `udbx4go v0.1.0`。
-5. 每个仓库发布前先补 changelog、版本号和 release notes，再执行门禁命令。
+1. 提交 `udbx4ts v0.4.0` 发布准备改动和根目录发布状态更新。
+2. 进入 `udbx4go v0.1.0` 首发准备，补齐版本章节、release notes 和发布门禁验证。
+3. 在具备网络和凭据后，推送各仓库 `main` 与 release tag。
+4. 按 `udbx4spec -> udbx4j -> udbx4ts -> udbx4go` 顺序完成正式发布。
+5. 每个仓库正式发布前复跑对应门禁命令，避免只依赖历史本地结果。
